@@ -1,22 +1,24 @@
 let myLibrary = [];
 
-function books(bookName, author, numPages, read){
-    this.bookName = bookName;
-    this.author = author;
-    this.numPages = numPages;
-    this.read = read;
+//function constructor
+class books{
+    constructor(bookName, author, numPages, read){
+        this.bookName = bookName;
+        this.author = author;
+        this.numPages = numPages;
+        this.read = read;
+    }
 }
 
-
-function addBookToLibrary(){
+function addBookToLibrary() {
     let book = Object.create(books);    
     book.bookName = document.querySelector(".Bookname").value;
     book.author = document.querySelector(".Author").value;
     book.numPages = document.querySelector(".Number").value;
     book.read = document.querySelector(".Read").checked;
     modalBg.classList.remove('active');
-    return myLibrary.push(book);
-    }
+    return myLibrary.push(book)
+}
 
 function clearForm(){
     document.querySelector(".Bookname").value = '';
@@ -28,21 +30,18 @@ function clearForm(){
 var modalBtn = document.querySelector('.modal-btn');
 var modalBg = document.querySelector('.modal-bg');
 var modalClose = document.querySelector('.modal-close')
-
 modalBtn.addEventListener('click', function(){
     modalBg.classList.add('active');
 })
 modalClose.addEventListener('click', function(){
     modalBg.classList.remove('active');
 })
-
 var theButton = document.querySelector(".submit");
 let myTable = document.querySelector('#table');
-
-let headers = ['Book Name', 'Author', 'Pages', 'Read'];
 let table = document.createElement('table');
 
 function createHeader(){
+    let headers = ['Book Name', 'Author', 'Pages', 'Read'];
     let headerRow = document.createElement('tr');
     headers.forEach(headerText => {
         let header = document.createElement('th');
@@ -54,31 +53,27 @@ function createHeader(){
 }
 function createRow(book){
     let row = document.createElement('tr');
-        Object.values(book).forEach(text =>{
-            let cell = document.createElement('td');
-            let textNode = document.createTextNode(text);
-            cell.appendChild(textNode);
-            row.appendChild(cell);
-        })
-        table.appendChild(row);
+    Object.values(book).forEach(text =>{
+        let cell = document.createElement('td');
+        let textNode = document.createTextNode(text);
+        cell.appendChild(textNode);
+        row.appendChild(cell);
+    })
+    table.appendChild(row);
 }
-theButton.addEventListener('click', function(){
-    addBookToLibrary();
-    table.replaceChildren();
-    createHeader();
-    let i = 0;
-    myLibrary.forEach(book =>{
-        createRow(book)
-         //add delete and read buttons
-        const button = document.createElement('button')
-        button.textContent = "delete";
-        button.classList.add(`${i}`);
-        
-        button.addEventListener('click', () =>{
-            myLibrary.splice(Number(button.className), 1);
-        })
-        table.appendChild(button);
-        const button2 = document.createElement('button');
+function createDeleteButton(i){
+    const button = document.createElement('button')
+    button.textContent = "delete";
+    button.classList.add(`${i}`);
+    table.appendChild(button);
+    button.addEventListener('click', () =>{
+        myLibrary.splice(Number(button.className), 1);
+        updateTable();
+    })    
+}
+
+function createRemoveButton(i){
+    const button2 = document.createElement('button');
         button2.textContent = "read";
         button2.classList.add(`${i}`);
         table.appendChild(button2);
@@ -89,10 +84,25 @@ theButton.addEventListener('click', function(){
             }else if(myLibrary[button2.className].read == false){
                 myLibrary[button2.className].read = true;
             }
-        
+            updateTable();
         })
+    
+}
+function updateTable(){
+    table.replaceChildren();
+    createHeader();
+    let i = 0;
+    myLibrary.forEach(book =>{
+        createRow(book)
+        createDeleteButton(i);
+        createRemoveButton(i);
         i++;
     })
     myTable.appendChild(table);
+}
+
+theButton.addEventListener('click', function(){
+    addBookToLibrary();
+    updateTable();
     clearForm();
 })
