@@ -51,7 +51,7 @@ function createHeader(){
     })
     table.appendChild(headerRow);
 }
-function createRow(book){
+function createRow(book, i){
     let row = document.createElement('tr');
     Object.values(book).forEach(text =>{
         let cell = document.createElement('td');
@@ -59,30 +59,32 @@ function createRow(book){
         cell.appendChild(textNode);
         row.appendChild(cell);
     })
+    let newButton = document.createElement('button');
+    newButton.innerText = "Read";
+    row.appendChild(newButton);
+    
+    let secondButton = document.createElement('button');
+    secondButton.innerText= "Delete";
+    row.appendChild(secondButton);
     table.appendChild(row);
+    createDeleteButton(i, row, secondButton);
+    createReadButton(i, row, newButton);
 }
-function createDeleteButton(i){
-    const button = document.createElement('button')
-    button.textContent = "delete";
-    button.classList.add(`${i}`);
-    table.appendChild(button);
-    button.addEventListener('click', () =>{
-        myLibrary.splice(Number(button.className), 1);
+function createDeleteButton(i, row, secondButton){
+    secondButton.classList.add(`${i}`);
+    secondButton.addEventListener('click', () =>{
+        myLibrary.splice(Number(secondButton.className), 1);
         updateTable();
     })    
 }
 
-function createRemoveButton(i){
-    const button2 = document.createElement('button');
-        button2.textContent = "read";
-        button2.classList.add(`${i}`);
-        table.appendChild(button2);
-        console.log(myLibrary);
-        button2.addEventListener('click', () => {
-            if (myLibrary[button2.className].read == true){
-                myLibrary[button2.className].read = false;
-            }else if(myLibrary[button2.className].read == false){
-                myLibrary[button2.className].read = true;
+function createReadButton(i, row, newButton){
+        newButton.classList.add(`${i}`);
+        newButton.addEventListener('click', () => {
+            if (myLibrary[newButton.className].read == true){
+                myLibrary[newButton.className].read = false;
+            }else if(myLibrary[newButton.className].read == false){
+                myLibrary[newButton.className].read = true;
             }
             updateTable();
         })
@@ -93,9 +95,7 @@ function updateTable(){
     createHeader();
     let i = 0;
     myLibrary.forEach(book =>{
-        createRow(book)
-        createDeleteButton(i);
-        createRemoveButton(i);
+        createRow(book, i)
         i++;
     })
     myTable.appendChild(table);
