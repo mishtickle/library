@@ -34,6 +34,12 @@
     right: 10px;
     font-weight: bold;
 }
-modal-btn{
-    float: right;
+table{
+    width: 100%;
+    border: 1px solid;
+}
+tr{
+    width: 20%;
+    border: 1px solid;
+    text-align: center;
 }
