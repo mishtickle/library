@@ -17,7 +17,25 @@ function addBookToLibrary() {
     book.numPages = document.querySelector(".Number").value;
     book.read = document.querySelector(".Read").checked;
     modalBg.classList.remove('active');
-    return myLibrary.push(book)
+    if (validateForm() == true){
+        return myLibrary.push(book);
+    };
+}
+
+function validateForm() {
+    if (document.querySelector(".Bookname").validity.valueMissing == true){
+        alert('Must input bookname');
+        return false;
+    }
+    if (document.querySelector(".Author").validity.valueMissing == true){
+        alert('Must include author');
+        return false;
+    }
+    if (document.querySelector(".Number").validity.valueMissing == true){
+        alert('Must select number of pages')
+        return false;
+    }
+    return true;
 }
 
 function clearForm(){
